@@ -1,0 +1,102 @@
+{
+  "name": "LoanItem",
+  "type": "object",
+  "properties": {
+    "item_name": {
+      "type": "string",
+      "description": "Name of the item being loaned"
+    },
+    "item_description": {
+      "type": "string",
+      "description": "Description of the item"
+    },
+    "item_photo": {
+      "type": "string",
+      "description": "Photo URL of the item"
+    },
+    "lender_email": {
+      "type": "string",
+      "description": "Email of the person lending the item"
+    },
+    "lender_name": {
+      "type": "string",
+      "description": "Name of the lender"
+    },
+    "borrower_email": {
+      "type": "string",
+      "description": "Email of the person borrowing the item"
+    },
+    "borrower_name": {
+      "type": "string",
+      "description": "Name of the borrower"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "return_pending",
+        "returned",
+        "requested_back",
+        "lost",
+        "stolen",
+        "overdue"
+      ],
+      "default": "active",
+      "description": "Current status of the loan"
+    },
+    "loan_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the item was loaned"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Agreed return date"
+    },
+    "return_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Actual return date"
+    },
+    "return_photo": {
+      "type": "string",
+      "description": "Photo URL confirming return"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the loan"
+    },
+    "condition_at_loan": {
+      "type": "string",
+      "enum": [
+        "new",
+        "like_new",
+        "good",
+        "fair",
+        "poor"
+      ],
+      "description": "Condition when loaned out"
+    },
+    "condition_at_return": {
+      "type": "string",
+      "enum": [
+        "new",
+        "like_new",
+        "good",
+        "fair",
+        "poor"
+      ],
+      "description": "Condition when returned"
+    }
+  },
+  "required": [
+    "item_name",
+    "lender_email",
+    "lender_name",
+    "borrower_email",
+    "borrower_name",
+    "loan_date",
+    "due_date"
+  ]
+}
