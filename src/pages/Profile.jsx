@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import {
   User, Mail, ArrowUpRight, ArrowDownLeft, CheckCircle,
-  AlertTriangle, LogOut, Cloud, QrCode, Shield, Bell, ChevronRight, Settings
+  AlertTriangle, LogOut, Cloud, QrCode, Shield, Bell, ChevronRight
 } from "lucide-react";
+import UserQRCode from "../components/profile/UserQRCode";
 import { motion } from "framer-motion";
 
 export default function Profile() {
@@ -95,16 +96,18 @@ export default function Profile() {
             </Card>
           </div>
 
+          <UserQRCode user={user} />
+
           {/* Quick actions — PayPal-style menu */}
           <Card className="border-border/50 overflow-hidden divide-y divide-border/50">
-            <Link to="/scan">
+            <Link to="/track">
               <div className="flex items-center gap-3 p-4 hover:bg-muted/30 active:bg-muted/50 transition-colors">
                 <div className="w-9 h-9 rounded-2xl bg-primary/10 flex items-center justify-center">
                   <QrCode className="w-4 h-4 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold">My QR Code</p>
-                  <p className="text-xs text-muted-foreground">Share to receive loans</p>
+                  <p className="text-sm font-semibold">Track Items</p>
+                  <p className="text-xs text-muted-foreground">Tile, AirTag & more</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-muted-foreground" />
               </div>

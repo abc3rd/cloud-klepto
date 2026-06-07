@@ -19,6 +19,8 @@ import LoanDetail from './pages/LoanDetail';
 import Activity from './pages/Activity';
 import Profile from './pages/Profile';
 import Scan from './pages/Scan';
+import RequestItem from './pages/RequestItem';
+import TrackItem from './pages/TrackItem';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -53,6 +55,8 @@ const AuthenticatedApp = () => {
           <Route path="/loan/:id" element={<LoanDetail />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/scan" element={<Scan />} />
+          <Route path="/request" element={<RequestItem />} />
+          <Route path="/track" element={<TrackItem />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>

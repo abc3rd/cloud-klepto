@@ -1,0 +1,52 @@
+{
+  "name": "ItemRequest",
+  "type": "object",
+  "properties": {
+    "requester_name": {
+      "type": "string"
+    },
+    "requester_email": {
+      "type": "string"
+    },
+    "lender_name": {
+      "type": "string"
+    },
+    "lender_email": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "item_description": {
+      "type": "string"
+    },
+    "requested_from_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "requested_to_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "declined",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "requester_email",
+    "lender_email",
+    "item_name",
+    "requested_from_date",
+    "requested_to_date"
+  ]
+}

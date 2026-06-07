@@ -16,7 +16,7 @@
     },
     "lender_email": {
       "type": "string",
-      "description": "Email of the person lending the item"
+      "description": "Email of the lender"
     },
     "lender_name": {
       "type": "string",
@@ -24,7 +24,7 @@
     },
     "borrower_email": {
       "type": "string",
-      "description": "Email of the person borrowing the item"
+      "description": "Email of the borrower"
     },
     "borrower_name": {
       "type": "string",
@@ -41,31 +41,26 @@
         "stolen",
         "overdue"
       ],
-      "default": "active",
-      "description": "Current status of the loan"
+      "default": "active"
     },
     "loan_date": {
       "type": "string",
-      "format": "date",
-      "description": "Date the item was loaned"
+      "format": "date"
     },
     "due_date": {
       "type": "string",
-      "format": "date",
-      "description": "Agreed return date"
+      "format": "date"
     },
     "return_date": {
       "type": "string",
-      "format": "date",
-      "description": "Actual return date"
+      "format": "date"
     },
     "return_photo": {
       "type": "string",
       "description": "Photo URL confirming return"
     },
     "notes": {
-      "type": "string",
-      "description": "Additional notes about the loan"
+      "type": "string"
     },
     "condition_at_loan": {
       "type": "string",
@@ -75,8 +70,7 @@
         "good",
         "fair",
         "poor"
-      ],
-      "description": "Condition when loaned out"
+      ]
     },
     "condition_at_return": {
       "type": "string",
@@ -86,8 +80,26 @@
         "good",
         "fair",
         "poor"
+      ]
+    },
+    "tracker_type": {
+      "type": "string",
+      "enum": [
+        "tile",
+        "airtag",
+        "samsung_tag",
+        "chipolo",
+        "manual"
       ],
-      "description": "Condition when returned"
+      "description": "Type of tracking device attached"
+    },
+    "tracker_url": {
+      "type": "string",
+      "description": "Sharing URL for the tracker app"
+    },
+    "tracker_location": {
+      "type": "string",
+      "description": "Manual last known location"
     }
   },
   "required": [

@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Plus, Clock, User } from "lucide-react";
+import { Home, Plus, Clock, User, Inbox } from "lucide-react";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
+  { path: "/request", icon: Inbox, label: "Request" },
   { path: "/create", icon: Plus, label: "Lend", primary: true },
   { path: "/activity", icon: Clock, label: "Activity" },
   { path: "/profile", icon: User, label: "Profile" },

@@ -10,6 +10,7 @@ import EmptyState from "../components/loans/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import SummaryChart from "../components/dashboard/SummaryChart";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -124,6 +125,15 @@ export default function Dashboard() {
       </div>
 
       <div className="px-5 mt-6">
+        {/* Summary Chart */}
+        <div className="mb-5">
+          <SummaryChart
+            active={activeLoans.length}
+            returned={myLoans.filter((l) => l.status === "returned").length}
+            total={myLoans.length}
+          />
+        </div>
+
         {/* Recent People */}
         {recentContacts.length > 0 && (
           <div className="mb-6">

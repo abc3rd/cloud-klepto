@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import { differenceInDays, parseISO, format } from "date-fns";
 import StatusBadge from "../components/loans/StatusBadge";
 import PhotoCapture from "../components/loans/PhotoCapture";
+import ItemHistoryLog from "../components/loans/ItemHistoryLog";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoanDetail() {
@@ -36,6 +37,11 @@ export default function LoanDetail() {
       const items = await base44.entities.LoanItem.filter({ id });
       return items[0];
     },
+  });
+
+  const { data: allLoans = [] } = useQuery({
+    queryKey: ["loans"],
+    queryFn: () => base44.entities.LoanItem.list("-created_date", 200),
   });
 
   const updateMutation = useMutation({
@@ -325,6 +331,9 @@ export default function LoanDetail() {
             </Button>
           </Card>
         )}
+
+        {/* Item History */}
+        <ItemHistoryLog allLoans={allLoans} currentLoanId={id} itemName={loan.item_name} />
 
         {loan.status === "return_pending" && isLender && (
           <Button
