@@ -16,8 +16,9 @@ import AppLayout from './components/layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import CreateLoan from './pages/CreateLoan';
 import LoanDetail from './pages/LoanDetail';
-import History from './pages/History';
+import Activity from './pages/Activity';
 import Profile from './pages/Profile';
+import Scan from './pages/Scan';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -50,7 +51,8 @@ const AuthenticatedApp = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/create" element={<CreateLoan />} />
           <Route path="/loan/:id" element={<LoanDetail />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/scan" element={<Scan />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
