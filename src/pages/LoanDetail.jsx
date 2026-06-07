@@ -14,7 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { differenceInDays, parseISO, format } from "date-fns";
 import StatusBadge from "../components/loans/StatusBadge";
-import PhotoCapture from "../components/loans/PhotoCapture";
+import SmartPhotoCapture from "../components/loans/SmartPhotoCapture";
 import ItemHistoryLog from "../components/loans/ItemHistoryLog";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -80,6 +80,10 @@ export default function LoanDetail() {
   const isOverdue = daysUntilDue < 0 && loan.status === "active";
 
   const handleReturn = () => {
+    if (!returnPhoto) {
+      alert("A photo of the item is required to confirm return condition.");
+      return;
+    }
     updateMutation.mutate({
       data: {
         status: "return_pending",
@@ -234,7 +238,12 @@ export default function LoanDetail() {
                 <Camera className="w-4 h-4 text-primary" />
                 Return Confirmation
               </h3>
-              <PhotoCapture onPhotoTaken={setReturnPhoto} label="Photo of returned item" />
+              <SmartPhotoCapture onPhotoTaken={setReturnPhoto} />
+              {!returnPhoto && (
+                <p className="text-xs text-destructive flex items-center gap-1">
+                  <Camera className="w-3 h-3" /> Photo required to submit return
+                </p>
+              )}
               <div className="space-y-2">
                 <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Return Condition</Label>
                 <Select value={returnCondition} onValueChange={setReturnCondition}>

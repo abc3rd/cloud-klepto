@@ -11,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SummaryChart from "../components/dashboard/SummaryChart";
+import QuickStats from "../components/dashboard/QuickStats";
+import LoanCalendar from "../components/dashboard/LoanCalendar";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -125,6 +127,9 @@ export default function Dashboard() {
       </div>
 
       <div className="px-5 mt-6">
+        {/* Quick Stats */}
+        <QuickStats loans={loans} userEmail={user?.email} />
+
         {/* Summary Chart */}
         <div className="mb-5">
           <SummaryChart
@@ -132,6 +137,11 @@ export default function Dashboard() {
             returned={myLoans.filter((l) => l.status === "returned").length}
             total={myLoans.length}
           />
+        </div>
+
+        {/* Loan Calendar */}
+        <div className="mb-5">
+          <LoanCalendar loans={myLoans} />
         </div>
 
         {/* Recent People */}

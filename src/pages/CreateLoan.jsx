@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Send } from "lucide-react";
 import { motion } from "framer-motion";
-import PhotoCapture from "../components/loans/PhotoCapture";
+import SmartPhotoCapture from "../components/loans/SmartPhotoCapture";
 import { format } from "date-fns";
 
 export default function CreateLoan() {
@@ -73,10 +73,14 @@ export default function CreateLoan() {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-6"
       >
-        <PhotoCapture
-          onPhotoTaken={(url) => updateField("item_photo", url)}
-          label="Photo of Item"
-        />
+        <div className="space-y-1">
+          <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Item Photo</Label>
+          <SmartPhotoCapture
+            onPhotoTaken={(url) => updateField("item_photo", url)}
+            onNameSuggested={(name) => { if (!form.item_name) updateField("item_name", name); }}
+            showAiNaming={true}
+          />
+        </div>
 
         <div className="space-y-2">
           <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Item Name</Label>
