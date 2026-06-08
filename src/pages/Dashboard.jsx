@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SummaryChart from "../components/dashboard/SummaryChart";
 import QuickStats from "../components/dashboard/QuickStats";
 import LoanCalendar from "../components/dashboard/LoanCalendar";
+import TopItemsLeaderboard from "../components/dashboard/TopItemsLeaderboard";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -179,6 +180,9 @@ export default function Dashboard() {
         <div className="mb-5">
           <LoanCalendar loans={myLoans} />
         </div>
+
+        {/* Top 10 Leaderboard */}
+        <TopItemsLeaderboard loans={loans} />
 
         {/* Recent People */}
         {recentContacts.length > 0 && (

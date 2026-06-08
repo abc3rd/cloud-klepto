@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Package, Calendar, User, Clock, Camera,
-  RotateCcw, AlertTriangle, ShieldX, CheckCircle, CalendarClock
+  RotateCcw, AlertTriangle, ShieldX, CheckCircle, CalendarClock, RefreshCw, DollarSign
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { differenceInDays, parseISO, format } from "date-fns";
@@ -17,6 +17,8 @@ import StatusBadge from "../components/loans/StatusBadge";
 import SmartPhotoCapture from "../components/loans/SmartPhotoCapture";
 import ItemHistoryLog from "../components/loans/ItemHistoryLog";
 import ExtensionRequest from "../components/loans/ExtensionRequest";
+import ConvertToLease from "../components/loans/ConvertToLease";
+import PaymentPanel from "../components/loans/PaymentPanel";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoanDetail() {
@@ -26,6 +28,7 @@ export default function LoanDetail() {
   const [user, setUser] = useState(null);
   const [showReturnForm, setShowReturnForm] = useState(false);
   const [showExtension, setShowExtension] = useState(false);
+  const [showLease, setShowLease] = useState(false);
   const [returnPhoto, setReturnPhoto] = useState(null);
   const [returnCondition, setReturnCondition] = useState("good");
 
@@ -354,6 +357,24 @@ export default function LoanDetail() {
               Return Item Now
             </Button>
           </Card>
+        )}
+
+        {/* Payments & Lease */}
+        <PaymentPanel loan={loan} currentUserEmail={user?.email} />
+
+        {/* Convert to Lease (lender only, active loans) */}
+        {isLender && loan.status === "active" && !showLease && (
+          <Button
+            variant="outline"
+            className="w-full h-12 rounded-2xl font-semibold gap-2 border-primary/30 text-primary"
+            onClick={() => setShowLease(true)}
+          >
+            <RefreshCw className="w-4 h-4" />
+            Convert to Lease
+          </Button>
+        )}
+        {showLease && (
+          <ConvertToLease loan={loan} onClose={() => setShowLease(false)} />
         )}
 
         {/* Item History */}

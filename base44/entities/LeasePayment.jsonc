@@ -1,0 +1,79 @@
+{
+  "name": "LeasePayment",
+  "type": "object",
+  "properties": {
+    "loan_id": {
+      "type": "string"
+    },
+    "payer_email": {
+      "type": "string"
+    },
+    "payer_name": {
+      "type": "string"
+    },
+    "payee_email": {
+      "type": "string"
+    },
+    "payee_name": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "payment_type": {
+      "type": "string",
+      "enum": [
+        "one_time",
+        "lease_monthly",
+        "lease_weekly",
+        "late_fee",
+        "damage_fee",
+        "settlement"
+      ],
+      "default": "one_time"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "cash",
+        "venmo",
+        "cashapp",
+        "paypal",
+        "zelle",
+        "other"
+      ],
+      "default": "cash"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "disputed"
+      ],
+      "default": "pending"
+    },
+    "note": {
+      "type": "string"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "paid_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "loan_id",
+    "payer_email",
+    "payee_email",
+    "item_name",
+    "amount",
+    "payment_type"
+  ]
+}
