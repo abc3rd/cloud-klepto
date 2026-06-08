@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import PullToRefresh from "../components/common/PullToRefresh";
+import PushNotificationSetup from "../components/common/PushNotificationSetup";
 import BulkReturnBar from "../components/dashboard/BulkReturnBar";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -162,6 +163,8 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+
+      <PushNotificationSetup />
 
       <div className="px-5 mt-6">
         {/* Quick Stats */}
