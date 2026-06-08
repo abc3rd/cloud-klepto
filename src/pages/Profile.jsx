@@ -16,6 +16,7 @@ import {
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import UserQRCode from "../components/profile/UserQRCode";
+import BorrowerRatings from "../components/profile/BorrowerRatings";
 import { motion } from "framer-motion";
 
 export default function Profile() {
@@ -102,6 +103,12 @@ export default function Profile() {
           </div>
 
           <UserQRCode user={user} />
+
+          {/* Borrower Ratings */}
+          <BorrowerRatings
+            currentUser={user}
+            returnedLoans={myLoans.filter((l) => l.status === "returned")}
+          />
 
           {/* Quick actions — PayPal-style menu */}
           <Card className="border-border/50 overflow-hidden divide-y divide-border/50">

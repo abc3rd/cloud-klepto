@@ -30,6 +30,7 @@ export default function CreateLoan() {
     due_date: "",
     condition_at_loan: "good",
     notes: "",
+    late_fee: "",
   });
 
   const createMutation = useMutation({
@@ -44,6 +45,7 @@ export default function CreateLoan() {
     e.preventDefault();
     createMutation.mutate({
       ...form,
+      late_fee: form.late_fee ? parseFloat(form.late_fee) : undefined,
       lender_email: user?.email,
       lender_name: user?.full_name || "Me",
       loan_date: format(new Date(), "yyyy-MM-dd"),
@@ -153,6 +155,23 @@ export default function CreateLoan() {
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Late Fee (optional)</Label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+            <Input
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              value={form.late_fee}
+              onChange={(e) => updateField("late_fee", e.target.value)}
+              className="h-12 rounded-xl bg-muted/50 border-0 text-sm pl-7"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">If set, this amount will appear in overdue reminder emails sent to the borrower.</p>
         </div>
 
         <div className="space-y-2">

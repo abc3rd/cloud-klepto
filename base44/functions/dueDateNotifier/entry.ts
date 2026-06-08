@@ -27,10 +27,21 @@ Deno.serve(async (req) => {
     }
 
     if (daysLeft < 0) {
+      const daysOverdue = Math.abs(daysLeft);
+      const lateFeeText = loan.late_fee
+        ? `\n\n⚠️ Late Fee: A late fee of $${loan.late_fee.toFixed(2)} was specified for overdue returns. Please settle this with ${loan.lender_name} upon return.`
+        : "";
+      // Notify borrower of overdue + late fee
+      await base44.asServiceRole.integrations.Core.SendEmail({
+        to: loan.borrower_email,
+        subject: `🚨 Overdue: "${loan.item_name}" was due ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} ago`,
+        body: `Hi ${loan.borrower_name},\n\n"${loan.item_name}" borrowed from ${loan.lender_name} was due on ${loan.due_date} and is now ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} overdue.${lateFeeText}\n\nPlease return the item as soon as possible via the Cloud Klepto app.\n\nThanks,\nCloud Klepto`
+      });
+      // Notify lender
       await base44.asServiceRole.integrations.Core.SendEmail({
         to: loan.lender_email,
         subject: `🚨 Overdue Alert: "${loan.item_name}" is overdue`,
-        body: `Hi ${loan.lender_name},\n\n"${loan.item_name}" that you lent to ${loan.borrower_name} was due on ${loan.due_date} and has not been returned.\n\nYou can request it back or mark it as lost/stolen in the Cloud Klepto app.\n\nThanks,\nCloud Klepto`
+        body: `Hi ${loan.lender_name},\n\n"${loan.item_name}" that you lent to ${loan.borrower_name} was due on ${loan.due_date} and has not been returned.${loan.late_fee ? `\n\nNote: You specified a late fee of $${loan.late_fee.toFixed(2)} for overdue returns.` : ""}\n\nYou can request it back or mark it as lost/stolen in the Cloud Klepto app.\n\nThanks,\nCloud Klepto`
       });
       notified++;
     }

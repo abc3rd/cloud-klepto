@@ -1,0 +1,57 @@
+{
+  "name": "BorrowerRating",
+  "type": "object",
+  "properties": {
+    "loan_id": {
+      "type": "string"
+    },
+    "lender_email": {
+      "type": "string"
+    },
+    "lender_name": {
+      "type": "string"
+    },
+    "borrower_email": {
+      "type": "string"
+    },
+    "borrower_name": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "stars": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "condition_feedback": {
+      "type": "string",
+      "enum": [
+        "excellent",
+        "good",
+        "fair",
+        "poor",
+        "damaged"
+      ]
+    },
+    "reliability": {
+      "type": "string",
+      "enum": [
+        "on_time",
+        "slightly_late",
+        "very_late",
+        "no_return"
+      ]
+    },
+    "comment": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "loan_id",
+    "lender_email",
+    "borrower_email",
+    "stars"
+  ]
+}

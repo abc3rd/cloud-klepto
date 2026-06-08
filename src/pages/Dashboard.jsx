@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import PullToRefresh from "../components/common/PullToRefresh";
+import BulkReturnBar from "../components/dashboard/BulkReturnBar";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +19,8 @@ import LoanCalendar from "../components/dashboard/LoanCalendar";
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [tab, setTab] = useState("activity");
+  const [selectMode, setSelectMode] = useState(false);
+  const [selected, setSelected] = useState(new Set());
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -27,6 +30,32 @@ export default function Dashboard() {
   const handleRefresh = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: ["loans"] });
   }, [queryClient]);
+
+  const bulkReturnMutation = useMutation({
+    mutationFn: async (ids) => {
+      await Promise.all(
+        ids.map((id) =>
+          base44.entities.LoanItem.update(id, {
+            status: "returned",
+            return_date: new Date().toISOString().split("T")[0],
+          })
+        )
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["loans"] });
+      setSelected(new Set());
+      setSelectMode(false);
+    },
+  });
+
+  const toggleSelect = (id) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
 
   const { data: loans = [], isLoading } = useQuery({
     queryKey: ["loans"],
@@ -200,6 +229,17 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Bulk select toggle */}
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Loans</p>
+          <button
+            onClick={() => { setSelectMode((v) => !v); setSelected(new Set()); }}
+            className="text-xs text-primary font-semibold"
+          >
+            {selectMode ? "Cancel" : "Select"}
+          </button>
+        </div>
+
         {/* Activity Tabs */}
         <Tabs value={tab} onValueChange={setTab} className="mb-4">
           <TabsList className="w-full bg-muted/60 rounded-full p-1 h-auto">
@@ -225,21 +265,42 @@ export default function Dashboard() {
         ) : (
           <div className="space-y-3">
             <AnimatePresence>
-              {filteredLoans.map((loan, i) => (
-                <motion.div
-                  key={loan.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.03 }}
-                >
-                  <LoanCard loan={loan} currentUserEmail={user?.email} />
-                </motion.div>
-              ))}
+              {filteredLoans.map((loan, i) => {
+                const isSelectable = selectMode && ["active", "requested_back", "return_pending"].includes(loan.status);
+                const isSelected = selected.has(loan.id);
+                return (
+                  <motion.div
+                    key={loan.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    className="relative"
+                    onClick={isSelectable ? () => toggleSelect(loan.id) : undefined}
+                  >
+                    {selectMode && (
+                      <div className={`absolute left-3 top-1/2 -translate-y-1/2 z-10 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        isSelected ? "bg-primary border-primary" : "bg-background border-muted-foreground"
+                      }`}>
+                        {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      </div>
+                    )}
+                    <div className={selectMode ? "pl-10 pointer-events-none" : ""}>
+                      <LoanCard loan={loan} currentUserEmail={user?.email} />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </div>
         )}
       </div>
     </div>
+    <BulkReturnBar
+      selectedCount={selected.size}
+      onReturn={() => bulkReturnMutation.mutate([...selected])}
+      onClear={() => { setSelected(new Set()); setSelectMode(false); }}
+      isPending={bulkReturnMutation.isPending}
+    />
     </PullToRefresh>
   );
 }

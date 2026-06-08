@@ -62,6 +62,10 @@
     "notes": {
       "type": "string"
     },
+    "late_fee": {
+      "type": "number",
+      "description": "Optional late fee amount in USD if item is overdue"
+    },
     "condition_at_loan": {
       "type": "string",
       "enum": [
