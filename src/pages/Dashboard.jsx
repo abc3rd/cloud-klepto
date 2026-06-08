@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import PullToRefresh from "../components/common/PullToRefresh";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,10 +18,15 @@ import LoanCalendar from "../components/dashboard/LoanCalendar";
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [tab, setTab] = useState("activity");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(setUser);
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ["loans"] });
+  }, [queryClient]);
 
   const { data: loans = [], isLoading } = useQuery({
     queryKey: ["loans"],
@@ -53,6 +59,7 @@ export default function Dashboard() {
   ).values()].slice(0, 5);
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="pb-4">
       {/* Hero Card — Cash App style */}
       <div className="relative bg-gradient-to-br from-primary via-primary to-[#b800b8] px-5 pt-14 pb-8 overflow-hidden">
@@ -233,5 +240,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   );
 }

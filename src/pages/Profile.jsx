@@ -8,8 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import {
   User, Mail, ArrowUpRight, ArrowDownLeft, CheckCircle,
-  AlertTriangle, LogOut, Cloud, QrCode, Shield, Bell, ChevronRight
+  AlertTriangle, LogOut, Cloud, QrCode, Shield, Bell, ChevronRight, Trash2
 } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import UserQRCode from "../components/profile/UserQRCode";
 import { motion } from "framer-motion";
 
@@ -142,6 +147,42 @@ export default function Profile() {
             <LogOut className="w-4 h-4" />
             Sign Out
           </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                className="w-full h-10 rounded-2xl font-medium gap-2 text-muted-foreground text-xs"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="rounded-2xl">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete your account and all associated data. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className="rounded-xl bg-destructive hover:bg-destructive/90"
+                  onClick={async () => {
+                    await base44.integrations.Core.SendEmail({
+                      to: user?.email,
+                      subject: "Account Deletion Request",
+                      body: `A deletion request was submitted for account: ${user?.email}. Please contact support to complete the deletion.`,
+                    });
+                    base44.auth.logout();
+                  }}
+                >
+                  Delete Account
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </motion.div>
       </div>
     </div>

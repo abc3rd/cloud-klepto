@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import PullToRefresh from "../components/common/PullToRefresh";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 import LoanCard from "../components/loans/LoanCard";
@@ -13,6 +14,7 @@ export default function Activity() {
   const [user, setUser] = useState(null);
   const [tab, setTab] = useState("all");
   const [search, setSearch] = useState("");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(setUser);
@@ -22,6 +24,10 @@ export default function Activity() {
     queryKey: ["loans"],
     queryFn: () => base44.entities.LoanItem.list("-created_date", 200),
   });
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ["loans"] });
+  }, [queryClient]);
 
   const myLoans = loans.filter(
     (l) => l.lender_email === user?.email || l.borrower_email === user?.email
@@ -41,6 +47,7 @@ export default function Activity() {
     );
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="px-5 pt-14 pb-4">
       <h1 className="text-lg font-bold mb-5">Activity</h1>
 
@@ -81,5 +88,6 @@ export default function Activity() {
         </div>
       )}
     </div>
+    </PullToRefresh>
   );
 }

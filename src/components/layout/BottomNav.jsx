@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, Plus, Clock, User, Inbox } from "lucide-react";
 
 const navItems = [
@@ -11,6 +11,16 @@ const navItems = [
 
 export default function BottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, path) => {
+    if (location.pathname === path) {
+      e.preventDefault();
+      // already on this tab — scroll to top / reset
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate(path, { replace: true });
+    }
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-xl border-t border-border safe-area-bottom">
@@ -21,6 +31,7 @@ export default function BottomNav() {
             <Link
               key={path}
               to={path}
+              onClick={(e) => handleNavClick(e, path)}
               className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-2xl transition-all duration-200 ${
                 primary
                   ? "relative"

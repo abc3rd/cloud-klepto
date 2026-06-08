@@ -92,6 +92,17 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Prevent browser bounce on iOS */
+body {
+  overscroll-behavior-y: none;
+}
+
+/* Native-feel: no text selection on interactive elements */
+button, nav, a {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* Hide scrollbar for cleaner mobile feel */
 ::-webkit-scrollbar {
   display: none;

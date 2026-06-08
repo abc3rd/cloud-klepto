@@ -9,13 +9,14 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Package, Calendar, User, Clock, Camera,
-  RotateCcw, AlertTriangle, ShieldX, CheckCircle
+  RotateCcw, AlertTriangle, ShieldX, CheckCircle, CalendarClock
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { differenceInDays, parseISO, format } from "date-fns";
 import StatusBadge from "../components/loans/StatusBadge";
 import SmartPhotoCapture from "../components/loans/SmartPhotoCapture";
 import ItemHistoryLog from "../components/loans/ItemHistoryLog";
+import ExtensionRequest from "../components/loans/ExtensionRequest";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoanDetail() {
@@ -24,6 +25,7 @@ export default function LoanDetail() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [showReturnForm, setShowReturnForm] = useState(false);
+  const [showExtension, setShowExtension] = useState(false);
   const [returnPhoto, setReturnPhoto] = useState(null);
   const [returnCondition, setReturnCondition] = useState("good");
 
@@ -287,6 +289,19 @@ export default function LoanDetail() {
                 <RotateCcw className="w-4 h-4" />
                 Return Item
               </Button>
+            )}
+            {!isLender && !showReturnForm && !showExtension && (
+              <Button
+                variant="outline"
+                className="w-full h-12 rounded-2xl font-semibold gap-2 border-primary/30 text-primary"
+                onClick={() => setShowExtension(true)}
+              >
+                <CalendarClock className="w-4 h-4" />
+                Request Extension
+              </Button>
+            )}
+            {showExtension && (
+              <ExtensionRequest loan={loan} onClose={() => setShowExtension(false)} />
             )}
 
             {isLender && (
