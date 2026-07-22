@@ -1,0 +1,3 @@
+- [x] Modify Capacitor library namespace in `build.gradle`
+- [x] Verify build success
+- [x] Create walkthrough

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Klepto</string>
+    <string name="title_activity_main">Klepto</string>
+    <string name="package_name">com.omega.klepto</string>
+    <string name="custom_url_scheme">com.omega.klepto</string>
+</resources>
